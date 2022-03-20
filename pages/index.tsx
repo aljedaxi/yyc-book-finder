@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import {useState, Fragment, ReactNode} from 'react'
+import {useState, Fragment, ReactNode, FC} from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -56,7 +56,7 @@ const genSearchUrl = ({searchUrl}: Bookstore) => pipe ([
   searchUrl,
 ])
 
-const WithArrow = ({children}) => <Fragment>{children} &rarr;</Fragment>
+const WithArrow: FC = ({children}) => <Fragment>{children} &rarr;</Fragment>
 const Home: NextPage = () => {
   const [bookName, setBookName] = useState ('')
   const {container, main, title, description, grid, card, footer} = styles
