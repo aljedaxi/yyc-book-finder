@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Book Finder</title>
+		<meta name="description" content="Find Books" />
+		<link rel="icon" href="./favicon.ico" />
+		<link rel="stylesheet" href="./stuff.css">
+		<link rel="stylesheet" href="./globals.css">
+	</head>
+	<script type='module' defer>
+		const pipe = fs => x => fs.reduce ((acc, f) => f (acc), x)
+		const genSearchUrl = ({searchUrl}) => pipe ([
+			encodeURIComponent,
+			searchUrl,
+		])
+		const bookstores = [
+			{
+				name: 'Pages',
+				id: 'pages',
+				description: 'a cool bookstore in kensington',
+				searchUrl: s => `https://pageskensington.com/browse/filter/t/${s}/k/keyword`,
+			},
+			{
+				name: 'Shelf Life',
+				id: 'shelf',
+				description: 'a cool bookstore on 4th street',
+				searchUrl: s => `https://store.shelflifebooks.ca/browse/filter/t/${s}/k/keyword`,
+			},
+			{
+				name: 'the next page',
+				id: 'page',
+				description: 'a cool bookstore in inglewood w pretty darn good espresso',
+				searchUrl: s => `https://www.nextpageyyc.ca/browse/filter/t/${s}/k/keyword`
+			},
+			{
+				name: 'Library Genesis',
+				id: 'libgen',
+				description: 'you shouldn&apos;t use this! this is piracy and piracy is illegal!',
+				searchUrl: s => `http://libgen.is/search.php?req=${s}&lg_topic=libgen&open=0&view=simple&res=25&phrase=1&column=def`
+			},
+			{
+				name: 'Calgary Public Library',
+				id: 'cpl',
+				description: 'the library. god save the queen.',
+				searchUrl: s => `https://calgary.bibliocommons.com/v2/search?searchType=smart&query=${s}`
+			},
+			{
+				name: 'Fair&apos;s Fair',
+				id: 'ff',
+				description: 'a big used bookstore in inglewood and chinook. unfortunately, you&apos;ll have to call them to check their stock.',
+				searchUrl: _ => 'http://www.fairsfair.com/contact-us.html',
+			}
+		]
+		document.querySelector('#book-input').addEventListener(
+			'input', 
+			e => {
+				const s = e.target.value
+				history.replaceState({}, '', `?query=${s}`)
+				bookstores.forEach(({searchUrl, id}) => {
+					document.querySelectorAll(`#${id}`).href = genSearchUrl ({searchUrl}) (s)
+				})
+			}
+		)
+		const grid = document.querySelector('#bookstore-grid')
+		bookstores.forEach(({id, name, description, searchUrl}) => {
+			const card = document.createElement('a')
+			card.id = id
+			card.className = 'card'
+			const existingQuery = new URLSearchParams(window.location.search)?.get('query')
+			card.href = existingQuery ? genSearchUrl ({searchUrl}) (existingQuery) : ''
+			card.innerHTML = `<h2>${name} &rarr;</h2><p>${description ?? 'a book store lol'}</p>`
+			grid.appendChild(card)
+		})
+	</script>
+	<div class='container'>
+		<main class='main'>
+			<h1 class='title'>
+				Search for a book in Calgary
+			</h1>
+	
+			<p class='description'>
+				Enter your books name into the text box below. Each box will link to that bookstore&apos;s inventory, showing whether they have the book in stock, the price, &amp;c.
+				<br />
+				<br />
+				<label htmlFor='book-input'>
+					Book Name
+					<input name='book' id='book-input' />
+				</label>
+			</p>
+	
+			<div id='bookstore-grid' class='grid'>
+			</div>
+		</main>
+	
+		<footer class='footer'>
+			<a href="https://daxi.ml">
+				made with &lt;3 by daxi
+			</a>
+			<img src="http://www.tailsgetstrolled.org/images/notepad.png" alt="site created with notepad, the right way">
+		</footer>
+	</div>
+</html>
