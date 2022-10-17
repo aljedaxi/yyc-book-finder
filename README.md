@@ -1,1 +1,1 @@
-This is no longer a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# u can write html. i believe in u.
