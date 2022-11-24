@@ -57,7 +57,7 @@
 				const s = e.target.value
 				history.replaceState({}, '', `?query=${s}`)
 				bookstores.forEach(({searchUrl, id}) => {
-					document.querySelectorAll(`#${id}`).href = genSearchUrl ({searchUrl}) (s)
+					document.querySelector(`#${id}`).href = genSearchUrl ({searchUrl}) (s)
 				})
 			}
 		)
